@@ -20,8 +20,11 @@ st.set_page_config(
 )
 
 # ==================== 0. API 與 資料庫設定 ====================
-# 💡 如果你有 Gemini API Key，請填入下方引號中。若留空，系統會自動切換為「模擬測試模式」
-GEMINI_API_KEY = "" 
+# 優先從 Streamlit 雲端保險箱 (Secrets) 讀取 API Key，如果本機測試找不到，就設為空字串（進入模擬模式）
+if "GEMINI_API_KEY" in st.secrets:
+    GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
+else:
+    GEMINI_API_KEY = "AQ.Ab8RN6LDLnzThVhZUvg2dgjD0Ix7WQm8xxiPUF4zZ3Sd9KusKg"
 
 # 初始化 Excel 檔案
 courses_file = "ai_courses.xlsx"     # 儲存 AI 生成過的課程
