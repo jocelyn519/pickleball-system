@@ -54,7 +54,10 @@ def ask_gemini_for_course(topic, age_group, duration, goal):
     
     # 實際呼叫 API
     try:
-        client = genai.Client(api_key=GEMINI_API_KEY)
+        # 🔄 改用更穩定且兼容性最高的舊版 initialization 方式
+        import google.generativeai as old_genai
+        old_genai.configure(api_key=GEMINI_API_KEY)
+        
         prompt = f"""
         你是一位專業的匹克球(Pickleball)教練。請針對以下需求設計一堂結構完整的課程：
         - 課程主題：{topic}
@@ -70,10 +73,10 @@ def ask_gemini_for_course(topic, age_group, duration, goal):
             "教材": "這堂課需要準備的球具或輔助道具"
         }}
         """
-        response = client.models.generate_content(
-            model='gemini-2.5-flash',
-            contents=prompt,
-        )
+        # 使用最資深穩定的 gemini-pro 或 gemini-1.5-flash 模型試試看
+        model = old_genai.GenerativeModel('gemini-1.5-flash')
+        response = model.generate_content(prompt)
+        
         # 解析 JSON
         clean_text = response.text.strip().replace("```json", "").replace("```", "")
         return json.loads(clean_text)
@@ -82,7 +85,7 @@ def ask_gemini_for_course(topic, age_group, duration, goal):
         return {
             "課程名稱": f"【生成失敗備用】{topic}訓練班",
             "大綱": goal,
-            "流程": "請手動填寫流程",
+            "流程": "請手動填寫流程，或檢查 API Key 是否有開通免費額度",
             "教材": "基礎匹克球裝備"
         }
 
