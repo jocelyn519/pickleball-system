@@ -74,7 +74,7 @@ def ask_gemini_for_course(topic, age_group, duration, goal):
         }}
         """
         # 使用最資深穩定的 gemini-pro 或 gemini-1.5-flash 模型試試看
-        model = old_genai.GenerativeModel('gemini-1.5-flash-latest')
+        model = old_genai.GenerativeModel('models/gemini-1.5-flash')
         response = model.generate_content(prompt)
         
         # 解析 JSON
