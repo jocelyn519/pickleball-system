@@ -9,6 +9,7 @@ import streamlit as st
 import pandas as pd
 import os
 import json
+from google import genai  # 使用全新官方推薦套件
 
 # 頁面設定
 st.set_page_config(
@@ -46,15 +47,14 @@ def ask_gemini_for_course(topic, age_group, duration, goal):
         return {
             "課程名稱": f"【{age_group}專屬】{topic}核心強化班",
             "大綱": f"本課程專為{age_group}設計，核心目標為：{goal}。",
-            "流程": "1. 熱身運動與關節活動 (10 mins)\n2. 正背面擊球控球基礎練習 (20 mins)\n3. 實戰配對對打與走位引導 (20 mins)\n4. 放鬆伸展與今日表現檢討 (10 mins)",
+            "流程": "1. 熱身運動與關節活動 (10 mins)\n2. 正背面擊球控球基礎練習 (20 mins)\n3. 實戰配對對打與走位引引导 (20 mins)\n4. 放鬆伸展與今日表現檢討 (10 mins)",
             "教材": "匹克球拍、高彈性匹克球、標誌錐、移動式網架"
         }
     
     # 實際呼叫 API
     try:
-        # 🔄 採用最成熟穩定的呼叫管道
-        import google.generativeai as old_genai
-        old_genai.configure(api_key=GEMINI_API_KEY)
+        # 🔄 使用新版新專案客戶端初始化方式
+        client = genai.Client(api_key=GEMINI_API_KEY)
         
         prompt = f"""
         你是一位專業的匹克球(Pickleball)教練。請針對以下需求設計一堂結構完整的課程：
@@ -71,9 +71,11 @@ def ask_gemini_for_course(topic, age_group, duration, goal):
             "教材": "這堂課需要準備的球具或輔助道具"
         }}
         """
-        # 使用精準的舊管道模型識別碼
-        model = old_genai.GenerativeModel('models/gemini-1.5-flash')
-        response = model.generate_content(prompt)
+        # 使用新版官方最推崇且絕對支援的 'gemini-2.5-flash' 模型
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=prompt,
+        )
         
         # 解析 JSON
         clean_text = response.text.strip().replace("```json", "").replace("```", "")
