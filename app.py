@@ -24,7 +24,7 @@ st.set_page_config(
 if "GEMINI_API_KEY" in st.secrets:
     GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 else:
-    GEMINI_API_KEY = "AQ.Ab8RN6LDLnzThVhZUvg2dgjD0Ix7WQm8xxiPUF4zZ3Sd9KusKg"
+    GEMINI_API_KEY = ""
 
 # 初始化 Excel 檔案
 courses_file = "ai_courses.xlsx"     # 儲存 AI 生成過的課程
