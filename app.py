@@ -9,14 +9,12 @@ import streamlit as st
 import pandas as pd
 import os
 import json
-from google import genai
-from google.genai import types
 
 # 頁面設定
 st.set_page_config(
     page_title="AI匹克球課程管理系統",
     page_icon="🎓",
-    layout="wide" # 改為寬螢幕佈局，左邊選單、右邊內容更專業
+    layout="wide" # 寬螢幕佈局
 )
 
 # ==================== 0. API 與 資料庫設定 ====================
@@ -54,7 +52,7 @@ def ask_gemini_for_course(topic, age_group, duration, goal):
     
     # 實際呼叫 API
     try:
-        # 🔄 改用更穩定且兼容性最高的舊版 initialization 方式
+        # 🔄 採用最成熟穩定的呼叫管道
         import google.generativeai as old_genai
         old_genai.configure(api_key=GEMINI_API_KEY)
         
@@ -73,7 +71,7 @@ def ask_gemini_for_course(topic, age_group, duration, goal):
             "教材": "這堂課需要準備的球具或輔助道具"
         }}
         """
-        # 使用最資深穩定的 gemini-pro 或 gemini-1.5-flash 模型試試看
+        # 使用精準的舊管道模型識別碼
         model = old_genai.GenerativeModel('models/gemini-1.5-flash')
         response = model.generate_content(prompt)
         
